@@ -9,12 +9,23 @@ import java.util.concurrent.TimeUnit;
 
 public class Main {
 
+    public static Vector3 randomPointInUnitCircle() {
+        Vector3 p;
+
+        do {
+            p = Vector3.create(Math.random(), Math.random(), Math.random()).scale(2).subtract(Vector3.create(1, 1, 1));
+        } while (p.squaredMag() > 1);
+
+        return p;
+    }
+
     public static Vector3 color(Ray ray, HittableList world) {
-        HitRecord record = world.hit(ray, 0, Double.MAX_VALUE);
+        HitRecord record = world.hit(ray, 0.001, Double.MAX_VALUE);
 
 
         if (record.hit()) {
-            return Vector3.create(record.normal().x() + 1, record.normal().y() + 1, record.normal().z() + 1).scale(.5);
+            Vector3 target = record.p().add(record.normal()).add(randomPointInUnitCircle());
+            return color(Ray.create(record.p(), target.subtract(record.p())), world).scale(.5);
 
         } else {
             Vector3 unitDirection = ray.direction();
@@ -27,9 +38,9 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        int ny = 1080;
+        int ny = 500;
         int nx = ny * 2;
-        int numSamples = 100;
+        int numSamples = 1000;
 
 
         BufferedImage image = new BufferedImage(nx, ny, BufferedImage.TYPE_3BYTE_BGR);
@@ -70,6 +81,8 @@ public class Main {
 
 
                 samples = samples.scale(1.0 / numSamples);
+
+                samples = Vector3.create(Math.sqrt(samples.x()), Math.sqrt(samples.y()), Math.sqrt(samples.z()));
 
                 Color c = new Color((int) (samples.x() * 255), (int) (samples.y() * 255), (int) (samples.z() * 255));
 

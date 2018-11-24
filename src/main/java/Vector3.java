@@ -38,4 +38,8 @@ public abstract class Vector3 {
     }
 
     public static final Vector3 ZERO = Vector3.create(0, 0, 0);
+
+    public double squaredMag() {
+        return x() * x() + y() * y() + z() * z();
+    }
 }
