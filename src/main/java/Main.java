@@ -38,9 +38,9 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        int ny = 500;
+        int ny = 1000;
         int nx = ny * 2;
-        int numSamples = 1000;
+        int numSamples = 200;
 
 
         BufferedImage image = new BufferedImage(nx, ny, BufferedImage.TYPE_3BYTE_BGR);
